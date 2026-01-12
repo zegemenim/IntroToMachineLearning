@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df = pd.read_csv('1-studyhours.csv')
+df = pd.read_csv('Datasets/1-studyhours.csv')
 print(df.head(), "\n")
 print(df.info(), "\n")
 
