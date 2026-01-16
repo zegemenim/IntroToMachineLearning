@@ -74,16 +74,16 @@ print("---- SVM Regressor Results ----")
 from sklearn.svm import SVR
 
 svr = SVR()
-# svr.fit(X_train, y_train)
-# y_pred_svr = svr.predict(X_test)
-# mae_svr = mean_absolute_error(y_test, y_pred_svr)
-# mse_svr = mean_squared_error(y_test, y_pred_svr)
-# rmse_svr = np.sqrt(mse_svr)
-# r2_svr = r2_score(y_test, y_pred_svr)
-# print(f"Mean Absolute Error: {mae_svr:.2f}")
-# print(f"Mean Squared Error: {mse_svr:.2f}")
-# print(f"Root Mean Squared Error: {rmse_svr:.2f}")
-# print(f"R^2 Score: {r2_svr:.2f}")
+svr.fit(X_train, y_train)
+y_pred_svr = svr.predict(X_test)
+mae_svr = mean_absolute_error(y_test, y_pred_svr)
+mse_svr = mean_squared_error(y_test, y_pred_svr)
+rmse_svr = np.sqrt(mse_svr)
+r2_svr = r2_score(y_test, y_pred_svr)
+print(f"Mean Absolute Error: {mae_svr:.2f}")
+print(f"Mean Squared Error: {mse_svr:.2f}")
+print(f"Root Mean Squared Error: {rmse_svr:.2f}")
+print(f"R^2 Score: {r2_svr:.2f}")
 
 # Hyperparameter Tuning for SVR
 print("---- Tuning SVR with RBF Kernel ----")
@@ -91,8 +91,8 @@ from sklearn.model_selection import GridSearchCV
 
 param_grid = {
     "C": [0.1, 1, 10, 100, 1000],
-    "gamma": [1, 0.1, 0.01, 0.001],
-    "kernel": ["rbf", "poly", "sigmoid", "linear"],
+    "gamma": [1, 0.1, 0.01],
+    "kernel": ["rbf", "poly", "sigmoid"],
 }
 
 grid = GridSearchCV(
