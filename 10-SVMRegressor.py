@@ -116,3 +116,5 @@ print(f"Mean Absolute Error: {mae_best:.2f}")
 print(f"Mean Squared Error: {mse_best:.2f}")
 print(f"Root Mean Squared Error: {rmse_best:.2f}")
 print(f"R^2 Score: {r2_best:.2f}")
+
+# The best model is the tuned SVR with RBF kernel. C: 1000, gamma: 0.1. 0.942 R^2 Score.
