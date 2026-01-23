@@ -84,12 +84,15 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 
 # Hyperparameter Tuning
 from sklearn.model_selection import GridSearchCV
+
 param_grid = {
     "n_estimators": [50, 100, 150, 200],
     "learning_rate": [0.001, 0.01, 0.1, 1.0],
 }
 
-grid = GridSearchCV(estimator= AdaBoostClassifier(), param_grid=param_grid, cv=3, n_jobs=-1, verbose=1)
+grid = GridSearchCV(
+    estimator=AdaBoostClassifier(), param_grid=param_grid, cv=3, n_jobs=-1, verbose=1
+)
 grid.fit(X_train_scaled, y_train)
 print("Best Parameters:", grid.best_params_)
 
@@ -101,3 +104,48 @@ print(confusion_matrix(y_test, y_pred_best))
 print("\nClassification Report (Tuned):")
 print(classification_report(y_test, y_pred_best))
 print("Accuracy (Tuned):", accuracy_score(y_test, y_pred_best))
+
+# LazyPredict
+from lazypredict.Supervised import LazyClassifier
+
+lazy_clf = LazyClassifier(verbose=0, ignore_warnings=True, custom_metric=None)
+models, predictions = lazy_clf.fit(X_train_scaled, X_test_scaled, y_train, y_test)
+print(models)
+
+# Test Random Forest Classifier for comparison
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier()
+rf.fit(X_train_scaled, y_train)
+y_pred_rf = rf.predict(X_test_scaled)
+print("Confusion Matrix (Random Forest):")
+print(confusion_matrix(y_test, y_pred_rf))
+print("\nClassification Report (Random Forest):")
+print(classification_report(y_test, y_pred_rf))
+print("Accuracy (Random Forest):", accuracy_score(y_test, y_pred_rf))
+
+# Hyperparameter Tuning for Random Forest
+param_grid_rf = {
+    "n_estimators": [50, 100, 150],
+    "max_depth": [None, 10, 20, 30],
+    "min_samples_split": [2, 5, 10],
+}
+
+grid_rf = GridSearchCV(
+    estimator=RandomForestClassifier(),
+    param_grid=param_grid_rf,
+    cv=3,
+    n_jobs=-1,
+    verbose=1,
+)
+grid_rf.fit(X_train_scaled, y_train)
+print("Best Parameters (Random Forest):", grid_rf.best_params_)
+
+best_rf = RandomForestClassifier(n_estimators=100, max_depth=10, min_samples_split=5)
+best_rf.fit(X_train_scaled, y_train)
+y_pred_best_rf = best_rf.predict(X_test_scaled)
+print("Confusion Matrix (Tuned Random Forest):")
+print(confusion_matrix(y_test, y_pred_best_rf))
+print("\nClassification Report (Tuned Random Forest):")
+print(classification_report(y_test, y_pred_best_rf))
+print("Accuracy (Tuned Random Forest):", accuracy_score(y_test, y_pred_best_rf))
