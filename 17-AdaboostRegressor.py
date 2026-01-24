@@ -67,3 +67,52 @@ plt.ylabel("Selling Price")
 
 print(df.corr())
 
+X = df.drop("selling_price", axis=1)
+y = df["selling_price"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=15
+)
+
+cat_cols = df.select_dtypes("object").columns.tolist()
+print(cat_cols)
+unique_values = df[cat_cols].nunique()
+print(unique_values)
+
+# seller_type, fuel_type, transmission - one-hot encoding
+# car_name, brand, model - frequency encoding
+one_hot_cols = ["seller_type", "fuel_type", "transmission"]
+freq_encode_cols = ["car_name", "brand", "model"]
+for col in freq_encode_cols:
+    freq = X_train[col].value_counts() / len(X_train)
+    X_train[col + "_freq"] = X_train[col].map(freq)
+    X_test[col + "_freq"] = X_test[col].map(freq)
+
+    mean_freq = freq.mean()
+    X_test[col + "_freq"] = X_test[col + "_freq"].fillna(mean_freq)
+
+print(X_train.head())
+
+X_train = X_train.drop(["car_name", "brand", "model"], axis=1)
+X_test = X_test.drop(["car_name", "brand", "model"], axis=1)
+
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+transformer = ColumnTransformer(
+    transformers=[
+        ("onehot", OneHotEncoder(drop="first", handle_unknown="ignore"), one_hot_cols)
+    ], remainder="passthrough"
+)
+
+X_train = transformer.fit_transform(X_train)
+X_test = transformer.transform(X_test)
+
+encoded_cols = transformer.get_feature_names_out()
+print(encoded_cols)
+
+X_train = pd.DataFrame(X_train, columns=encoded_cols)
+X_test = pd.DataFrame(X_test, columns=encoded_cols)
+print(X_train.head())
+print(X_test.head())
+
