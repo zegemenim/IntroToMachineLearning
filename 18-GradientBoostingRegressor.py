@@ -13,3 +13,9 @@ print(data.head())
 print(data.info())
 print(data.describe())
 print(data.isnull().sum())
+
+print(data.corr())
+sns.heatmap(data.corr(), annot=True, cmap="coolwarm")
+plt.title("Correlation Heatmap")
+# plt.show()
+
